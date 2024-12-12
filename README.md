@@ -6,7 +6,7 @@
 
 <h2>Project Screenshots:</h2>
 
-<img src="https://drive.google.com/file/d/15cYVV0vqBt6Uwq7mmJfU4ac4GtnvARp0/view?usp=drive_link" alt="project-screenshot" width="500" height="300/">
+<img src="./assets/screenshot1.png" alt="project-screenshot" width="500" height="300/">
 
 <h2>🛠️ Installation Steps:</h2>
 
