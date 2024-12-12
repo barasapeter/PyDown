@@ -33,5 +33,3 @@ pip install -r requerements.txt
 ```
 python pyplayer.py
 ```
-
-<h2>🍰 Contribution Guidelines:</h2>
