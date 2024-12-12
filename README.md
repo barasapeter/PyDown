@@ -28,6 +28,9 @@ python3 -m venv venv
 pip install -r requerements.txt
 ```
 
+<p> Install FZF on your system for fuzzy searching </p>
+<a href="https://github.com/junegunn/fzf"> Fzf download </>
+
 <p>4. Execution</p>
 
 ```
