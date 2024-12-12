@@ -29,7 +29,7 @@ pip install -r requerements.txt
 ```
 
 <p> Install FZF on your system for fuzzy searching </p>
-<a href="https://github.com/junegunn/fzf"> Fzf download </>
+<a href="https://github.com/junegunn/fzf"> Fzf download </a>
 
 <p>4. Execution</p>
 
