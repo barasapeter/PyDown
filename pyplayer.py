@@ -64,7 +64,7 @@ def download_video(url):
     global pbar  # Progress bar to be updated in the hook
     print(f"{Fore.YELLOW}Downloading video... Please wait.")
     ydl_opts = {
-        'format': 'best',
+        'format': 'bestvideo[height>=720]+bestaudio/best',
         'outtmpl': '%(title)s.%(ext)s',  # Save as video title
         'progress_hooks': [yt_dlp_progress_hook]
     }
