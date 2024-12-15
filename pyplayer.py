@@ -2,7 +2,6 @@ import subprocess
 import sys
 from pytube import Search
 import yt_dlp
-import time
 from tqdm import tqdm
 import re
 from colorama import Fore, Style, init
@@ -29,7 +28,6 @@ def search_youtube(query, max_results=50):
     try:
         search = Search(query)
         print(f"{Fore.YELLOW}Searching YouTube... Please wait.")
-        time.sleep(2)  # Simulate delay for loading results (for demo purposes)
         search_results = search.results[:max_results]  # Limit the number of results
         return [(video.title, video.watch_url) for video in search_results]
     except Exception as e:
