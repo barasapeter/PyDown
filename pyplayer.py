@@ -24,9 +24,22 @@ BANNER = f"""
 {Style.RESET_ALL}
 """
 
-def detect_package_manager():
+def is_package_installed(package_name):
+    """
+    Check if a package is installed by looking for its executable in the system's PATH.
+    """
     try:
-        # Check for common package managers
+        result = subprocess.call(["which", package_name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        return result == 0  # Return True if the command is found
+    except Exception as e:
+        print(f"Error checking if {package_name} is installed: {e}")
+        return False
+
+def detect_package_manager():
+    """
+    Detect the package manager available on the system.
+    """
+    try:
         if subprocess.call(["which", "apt"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0:
             return "apt", "sudo apt update && sudo apt install -y"
         elif subprocess.call(["which", "dnf"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0:
@@ -46,14 +59,20 @@ def detect_package_manager():
         return None, None
 
 def install_package(package_name):
-    manager, command = detect_package_manager()
-    if manager and command:
-        print(f"Detected package manager: {manager}")
-        install_command = f"{command} {package_name}"
-        print(f"Install command: {install_command}")
-        os.system(install_command)
+    """
+    Check if the package is installed. If not, detect the package manager and install the package.
+    """
+    if is_package_installed(package_name):
+        print(f"{package_name} is already installed.")
     else:
-        print("No supported package manager detected on this system.")
+        manager, command = detect_package_manager()
+        if manager and command:
+            print(f"Detected package manager: {manager}")
+            install_command = f"{command} {package_name}"
+            print(f"Installing {package_name} using: {install_command}")
+            os.system(install_command)
+        else:
+            print("No supported package manager detected on this system.")
 
 def search_youtube(query, max_results=50):
     """Search YouTube using pytube and return top max_results results."""
