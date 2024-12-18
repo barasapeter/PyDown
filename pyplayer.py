@@ -1,6 +1,6 @@
 import subprocess
 import sys
-from pytube import Search, YouTube
+from pytube import Search
 import yt_dlp
 from tqdm import tqdm
 import re
