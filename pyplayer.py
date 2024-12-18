@@ -5,6 +5,7 @@ import yt_dlp
 from tqdm import tqdm
 import re
 from colorama import Fore, Style, init
+import os
 
 # Initialize colorama
 init(autoreset=True)
@@ -22,6 +23,37 @@ BANNER = f"""
                                                                                        
 {Style.RESET_ALL}
 """
+
+def detect_package_manager():
+    try:
+        # Check for common package managers
+        if subprocess.call(["which", "apt"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0:
+            return "apt", "sudo apt update && sudo apt install -y"
+        elif subprocess.call(["which", "dnf"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0:
+            return "dnf", "sudo dnf install -y"
+        elif subprocess.call(["which", "yum"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0:
+            return "yum", "sudo yum install -y"
+        elif subprocess.call(["which", "pacman"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0:
+            return "pacman", "sudo pacman -S --noconfirm"
+        elif subprocess.call(["which", "zypper"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0:
+            return "zypper", "sudo zypper install -y"
+        elif subprocess.call(["which", "emerge"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0:
+            return "emerge", "sudo emerge"
+        else:
+            return None, None
+    except Exception as e:
+        print(f"Error detecting package manager: {e}")
+        return None, None
+
+def install_package(package_name):
+    manager, command = detect_package_manager()
+    if manager and command:
+        print(f"Detected package manager: {manager}")
+        install_command = f"{command} {package_name}"
+        print(f"Install command: {install_command}")
+        os.system(install_command)
+    else:
+        print("No supported package manager detected on this system.")
 
 def search_youtube(query, max_results=50):
     """Search YouTube using pytube and return top max_results results."""
@@ -91,10 +123,10 @@ def yt_dlp_progress_hook(d):
         pbar.refresh()
         print(f"\n{Fore.GREEN}Download complete!")
 
-def play_video(url):
+def play_video(url, player):
     """Play the video using mpv."""
     print(f"{Fore.YELLOW}Playing video with mpv...")
-    subprocess.run(["mpv", url])
+    subprocess.run([player, url])
 
 def main():
     # Display ASCII art banner
@@ -135,8 +167,15 @@ def main():
     if action == "d":
         download_video(selected_video_url)
     elif action == "p":
-        print(f"{Fore.YELLOW}Loading and playing video...")
-        play_video(selected_video_url)
+        action_player = input(f"{Fore.CYAN}Do you want to use vlc or mpv? (v/m): {Style.RESET_ALL}").strip().lower()
+        if action_player == "v":
+            install_package("vlc")
+            print(f"{Fore.YELLOW}Loading and playing video...")
+            play_video(selected_video_url, "vlc")
+        elif action_player == "m":
+            install_package("mpv")
+            print(f"{Fore.YELLOW}Loading and playing video...")
+            play_video(selected_video_url, "mpv")
     else:
         print(f"{Fore.RED}Invalid option. Exiting.")
 
